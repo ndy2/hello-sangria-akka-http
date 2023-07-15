@@ -1,0 +1,100 @@
+type User {
+    id: ID!
+    email: String!
+    password: String!
+    profile: Profile!
+}
+
+type Profile {
+    id: ID!
+    username: String!,
+    bio: String,
+    image: String
+}
+
+schema {
+    query: RootQuery
+    mutation: RootMutation
+}
+
+#fragment userWithResponse on User {
+#    email
+#    token
+#    profile {
+#        username
+#        bio
+#        image
+#    }
+#}
+
+################################
+## Query
+################################
+
+type RootQuery {
+    authenticate(input: AuthenticateInput!) : AuthenticatePayload
+    getCurrentUser(input: GetCurrentUserInput!) : GetCurrentUserPayload
+    getProfile(input: GetProfileInput) : GetProfilePayload
+}
+
+input AuthenticateInput {
+    email: String!
+    password: String!
+}
+type AuthenticatePayload {
+    email: String!
+    token: String!
+    username: String!
+    bio: String!
+    image: String!
+}
+
+input GetCurrentUserInput {
+    _empty: String
+}
+
+type GetCurrentUserPayload {
+    email: String!
+    token: String!
+    username: String!
+    bio: String!
+    image: String!
+}
+
+input GetProfileInput {
+    username: String!
+}
+
+type GetProfilePayload {
+    username: String!
+    bio: String!
+    image: String!
+}
+
+################################
+## Mutation
+################################
+type RootMutation {
+    registerUser(input: RegisterUserInput!): RegisterUserPayload
+    updateUser(input: UpdateUserInput!) : UpdateUserPayload
+}
+
+input RegisterUserInput {
+    username: String!
+    email: String!
+    password: String!
+}
+
+type RegisterUserPayload{
+    user: User
+}
+
+input UpdateUserInput {
+    email: String!
+    bio: String!
+    image: String!
+}
+
+type UpdateUserPayload {
+    user: User
+}

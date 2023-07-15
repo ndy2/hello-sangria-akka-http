@@ -3,10 +3,11 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.StatusCodes.*
 import akka.http.scaladsl.server.*
 import akka.http.scaladsl.server.Directives.*
+import realworld.RealworldSchema
 import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError}
 import sangria.http.akka.circe.CirceHttpSupport
 import sangria.marshalling.circe.*
-import schemaapp.RealworldSchemaApp03
+import sangria.renderer.SchemaRenderer
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
@@ -15,8 +16,10 @@ object ServerApp
   extends App
     with CorsSupport
     with CirceHttpSupport
-    with RealworldSchemaApp03 {
+    with RealworldSchema {
   implicit val system: ActorSystem = ActorSystem("sangria-server")
+
+  println(SchemaRenderer.renderSchema(schema))
 
   val route: Route =
     optionalHeaderValueByName("X-Apollo-Tracing") { _ =>

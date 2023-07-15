@@ -1,5 +1,0 @@
-type Profile {
-    username: String
-    bio: String
-    image: String
-}
