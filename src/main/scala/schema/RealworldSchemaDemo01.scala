@@ -2,10 +2,9 @@ package schema
 
 import sangria.schema.*
 
-trait RealworldSchemaDemo2  {
+trait RealworldSchemaDemo01 {
   private val QueryType = ObjectType("Query", fields[Unit, Unit](
-    Field("hello", StringType, resolve = _ => "Hello world! 1"),
-    Field("world", StringType, resolve = _ => "world world! 2"),
+    Field("hello", StringType, resolve = _ => "Hello world! 1")
   ))
 
   val schema: Schema[Unit, Unit] = Schema(QueryType)

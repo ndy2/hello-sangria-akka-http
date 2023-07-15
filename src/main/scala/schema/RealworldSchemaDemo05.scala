@@ -3,7 +3,7 @@ package schema
 import sangria.macros.LiteralGraphQLStringContext
 import sangria.schema.*
 
-trait RealworldSchemaDemo5 {
+trait RealworldSchemaDemo05 {
   val ast =
     graphql"""
       schema {

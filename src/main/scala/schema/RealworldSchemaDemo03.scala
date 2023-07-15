@@ -3,7 +3,7 @@ package schema
 import sangria.macros.LiteralGraphQLStringContext
 import sangria.schema.*
 
-trait RealworldSchemaDemo3 {
+trait RealworldSchemaDemo03 {
   private val ast = graphql"""
   type Query {
     hello: String!

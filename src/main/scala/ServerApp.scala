@@ -6,35 +6,31 @@ import akka.http.scaladsl.server.Directives.*
 import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError}
 import sangria.http.akka.circe.CirceHttpSupport
 import sangria.marshalling.circe.*
-import sangria.slowlog.SlowLog
-import schema.*
+import schemaapp.RealworldSchemaApp03
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 
-object Server
-    extends App
+object ServerApp
+  extends App
     with CorsSupport
     with CirceHttpSupport
-    with RealworldSchemaDemo6 {
+    with RealworldSchemaApp03 {
   implicit val system: ActorSystem = ActorSystem("sangria-server")
 
   val route: Route =
-    optionalHeaderValueByName("X-Apollo-Tracing") { tracing =>
+    optionalHeaderValueByName("X-Apollo-Tracing") { _ =>
       path("graphql") {
         graphQLPlayground ~
           prepareGraphQLRequest {
             case Success(req) =>
-              val middleware =
-                if (tracing.isDefined) SlowLog.apolloTracing :: Nil else Nil
               val graphQLResponse = Executor
                 .execute(
                   schema = schema,
                   queryAst = req.query,
                   userContext = (),
                   variables = req.variables,
-                  operationName = req.operationName,
-                  middleware = middleware
+                  operationName = req.operationName
                 )
                 .map(OK -> _)
                 .recover {

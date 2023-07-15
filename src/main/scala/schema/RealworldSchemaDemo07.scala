@@ -6,7 +6,7 @@ import sangria.marshalling.circe.CirceInputUnmarshaller
 import sangria.schema.*
 import sangria.schema.AstSchemaBuilder.resolverBased
 
-trait RealworldSchemaDemo6 {
+trait RealworldSchemaDemo07 {
   val ast =
     graphql"""
       schema {
@@ -18,13 +18,13 @@ trait RealworldSchemaDemo6 {
         foo: Boolean
       }
     """
+  private val trueFn: Context[Any, _] => Action[Any, _] = (_: Context[Any, _]) => true
+  private val falseFn: Context[Any, _] => Action[Any, _] = (_: Context[Any, _]) => false
 
-  val builder = resolverBased[Any](
-    FieldResolver.map(
-      "Query" -> Map(
-        "bar" -> (_ => true),
-        "foo" -> (_ => false)
-      )
+  private val builder: ResolverBasedAstSchemaBuilder[Any] = resolverBased[Any](
+    FieldResolver map "Query" -> Map(
+      "bar" -> trueFn,
+      "foo" -> falseFn
     ),
     AnyFieldResolver.defaultInput[Any, Json]
   )
@@ -32,18 +32,3 @@ trait RealworldSchemaDemo6 {
 
   val schema: Schema[Any, Any] = Schema.buildFromAst(ast, builder)
 }
-
-/** req
- query {
-  bar
-  foo
-}
- */
-
-/** resp
-{
-  "data": {
-    "bar": true,
-    "foo": false
-}
- */
