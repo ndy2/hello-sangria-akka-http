@@ -18,9 +18,11 @@ object Main extends App {
          }
       """
 
+  private val myResolver = new MyResolver
+
   def createdResolver(ctx: Context[Any, _]): Action[Any, _] = {
     val name = ctx.args.arg[String]("name")
-    Resolver.hello(name)
+    myResolver.hello(name)
   }
 
   private val builder = resolverBased(
@@ -43,7 +45,7 @@ object Main extends App {
   println(result)
 }
 
-object Resolver {
+class MyResolver {
   def hello(name: String): String = {
     "world"
   }
